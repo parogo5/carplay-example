@@ -77,7 +77,7 @@ To get started with this project, follow the steps below.
 ## 2. Installation
 Clone the repository:
 ```bash
-git clone https://github.com/yourusername/carplay-example.git
+git clone [https://github.com/yourusername/carplay-example.git](https://github.com/parogo5/carplay-example.git)
 cd carplay-example
 ```
 Open the project in Xcode:
