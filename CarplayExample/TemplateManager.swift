@@ -28,12 +28,13 @@ class TemplateManager: NSObject, CPInterfaceControllerDelegate {
     
     // MARK: - Templates
     
-    // 1. Show a Tab Bar interface
+    // MARK: - CPTabBarTemplate
+    
     func showTabBarInterface() {
         let listTemplate: CPListTemplate = CPListTemplate(title: "List", sections: [])
         let gridTemplate: CPGridTemplate = createGrid()
         
-        listTemplate.updateSections([updateList()])
+        listTemplate.updateSections([makeList()])
         listTemplate.tabImage = UIImage(systemName: "list.number")
         
         let tabBarTemplate = CPTabBarTemplate(templates: [listTemplate, gridTemplate])
@@ -41,7 +42,9 @@ class TemplateManager: NSObject, CPInterfaceControllerDelegate {
         carplayInterfaceController?.setRootTemplate(tabBarTemplate, animated: true, completion: nil)
         }
     
-    private func updateList() -> CPListSection {
+    // MARK: - CPListSection
+    
+    private func makeList() -> CPListSection {
         let listItems = [
             createListItem(text: "Item 1", detailText: "show alert", imageName: "1.circle.fill", action: {
                 self.showAlert()
@@ -52,7 +55,7 @@ class TemplateManager: NSObject, CPInterfaceControllerDelegate {
         ]
         return CPListSection(items: listItems)
     }
-
+    
     private func createListItem(text: String, detailText: String, imageName: String, action: (() -> Void)?) -> CPListItem {
         let item = CPListItem(text: text, detailText: detailText)
         item.accessoryType = .disclosureIndicator
@@ -63,13 +66,9 @@ class TemplateManager: NSObject, CPInterfaceControllerDelegate {
         return item
     }
     
-    private func createGridItem(text: String, imageName: String) -> CPGridButton {
-        let item = CPGridButton(titleVariants: [text], image: UIImage(systemName: imageName)!)
-        return item
-    }
+    // MARK: - CPGridTemplate
     
-    // 4. Create a Grid Template
-    func createGrid() -> CPGridTemplate {
+    private func createGrid() -> CPGridTemplate {
         let gridButton1 = CPGridButton(titleVariants: ["POI"], image: UIImage(systemName: "mappin.circle.fill")!) {_ in
             self.showPOITemplateErrorWithMaps()
         }
@@ -90,7 +89,13 @@ class TemplateManager: NSObject, CPInterfaceControllerDelegate {
         return gridTemplate
     }
     
-    // 5. Show an Alert
+    private func createGridItem(text: String, imageName: String) -> CPGridButton {
+        let item = CPGridButton(titleVariants: [text], image: UIImage(systemName: imageName)!)
+        return item
+    }
+    
+    // MARK: - CPAlertTemplate
+    
     func showAlert() {
         let alert = CPAlertTemplate(titleVariants: ["Alert", "Gas Station Nearby"],
                                     actions: [
@@ -104,8 +109,9 @@ class TemplateManager: NSObject, CPInterfaceControllerDelegate {
         carplayInterfaceController?.presentTemplate(alert, animated: true, completion: nil)
     }
     
+    // MARK: - CPActionSheetTemplate
+    
     func showActionSheet() {
-        // Crear un CPActionSheetTemplate
         let actionSheet = CPActionSheetTemplate(title: "Choose an Action", message: "Select one of the following options", actions: [
             CPAlertAction(title: "Option 1", style: .default, handler: { _ in
                 print("Option 1 selected")
@@ -123,6 +129,8 @@ class TemplateManager: NSObject, CPInterfaceControllerDelegate {
         // Presentar el CPActionSheetTemplate
         carplayInterfaceController?.presentTemplate(actionSheet, animated: true, completion: nil)
     }
+    
+    // MARK: - CPInformationTemplate
     
     func showInformationTemplate() {
         // Crear los elementos de información
@@ -144,6 +152,8 @@ class TemplateManager: NSObject, CPInterfaceControllerDelegate {
         // Presentar el template de información
         self.carplayInterfaceController?.pushTemplate(informationTemplate, animated: true, completion: nil)
     }
+    
+    //MARK: - CPPointOfInterest
 
     func createPOIs() -> [CPPointOfInterest]{
         // Define the first POI location using MKMapItem
@@ -177,7 +187,7 @@ class TemplateManager: NSObject, CPInterfaceControllerDelegate {
        return [firstPOI, secondPOI]
         
     }
-
+    
     func showPOITemplateErrorWithMaps() {
         // Create POI items
         let poiItems = createPOIs()
@@ -190,6 +200,8 @@ class TemplateManager: NSObject, CPInterfaceControllerDelegate {
         // Present the POI template
         carplayInterfaceController?.pushTemplate(poiTemplate, animated: true, completion: nil)
     }
+    
+    //MARK: - TextToSpeech
     
     @MainActor func playSoundTextToSpeech() {
         TextToSpeech.shared.speakText("Hola esto es un ejemplo de convertidor texto a voz")
